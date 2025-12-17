@@ -14,6 +14,7 @@ import {
   Twitter, Github, Briefcase, Layers, Video, Image, Globe, CheckCircle, 
   Plus, XCircle, Trash2, ChevronLeft, ChevronRight, Eye
 } from 'lucide-react';
+import { motion } from "framer-motion";
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import emailjs from "@emailjs/browser";
@@ -92,6 +93,24 @@ export default function PortfolioPage() {
   }
 
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
+
+  const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0 }
+};
+
+    const stagger = {
+      visible: {
+        transition: {
+          staggerChildren: 0.12
+        }
+      }
+    };
+
+    const fadeLeft = {
+      hidden: { opacity: 0, x: -24 },
+      visible: { opacity: 1, x: 0 }
+    };
 
   // PROJECT PREVIEW MODAL WITH GALLERY
   const ProjectPreviewModal = ({ project, onClose }) => {
@@ -324,141 +343,609 @@ export default function PortfolioPage() {
     );
   };
 
-  return (
-    <div className={dark ? 'bg-black text-white min-h-screen' : 'bg-white text-slate-900 min-h-screen'}>
-      <div className="max-w-6xl mx-auto px-6 py-10">
-        <header className="flex items-center justify-between py-4">
+          return (
+            <div className={dark ? 'bg-black text-white min-h-screen' : 'bg-white text-slate-900 min-h-screen'}>
+              <div className="max-w-6xl mx-auto px-6 py-10">
+                <motion.header
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="flex items-center justify-between py-4"
+        >
+          {/* Left: Logo + Name */}
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-md bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center font-bold text-lg">OT</div>
-            <div><h1 className="text-lg font-semibold">Timileyin O.</h1><p className="text-sm opacity-70">Graphic & Motion Designer — Frontend Dev</p></div>
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.4 }}
+              whileHover={{ scale: 1.05 }}
+              className="w-12 h-12 rounded-md bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center font-bold text-lg cursor-pointer"
+            >
+              OT
+            </motion.div>
+
+            <div>
+              <motion.h1
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.4 }}
+                className="text-lg font-semibold"
+              >
+                Timileyin O.
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 0.4 }}
+                className="text-sm opacity-70"
+              >
+                Graphic & Motion Designer — Frontend Dev
+              </motion.p>
+            </div>
           </div>
+
+          {/* Right: Nav + CTA */}
           <div className="flex items-center gap-4">
-            <nav className="hidden md:flex gap-6 text-sm opacity-85">
-              <a href="#about" className="hover:text-blue-600 transition-colors duration-300">About</a>
-              <a href="#services" className="hover:text-blue-600 transition-colors duration-300">Services</a>
-              <a href="#projects" className="hover:text-blue-600 transition-colors duration-300">Work</a>
-              <a href="#contact" className="hover:text-blue-600 transition-colors duration-300">Contact</a>
-            </nav>
-            <a href="#contact" className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700 transition-colors">Hire me</a>
+            <motion.nav
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: {},
+                visible: {
+                  transition: { staggerChildren: 0.08 }
+                }
+              }}
+              className="hidden md:flex gap-6 text-sm opacity-85"
+            >
+              {["About", "Services", "Work", "Contact"].map((item, i) => (
+                <motion.a
+                  key={i}
+                  href={`#${item.toLowerCase()}`}
+                  variants={{
+                    hidden: { opacity: 0, y: 6 },
+                    visible: { opacity: 1, y: 0 }
+                  }}
+                  className="hover:text-blue-600 transition-colors duration-300"
+                >
+                  {item}
+                </motion.a>
+              ))}
+            </motion.nav>
+
+            <motion.a
+              href="#contact"
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700 transition-colors"
+            >
+              Hire me
+            </motion.a>
           </div>
-        </header>
-        <section id="hero" className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        </motion.header>
+
+                <motion.section
+          id="hero"
+          initial="hidden"
+          animate="visible"
+          variants={stagger}
+          className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 items-center"
+        >
+          {/* LEFT */}
           <div>
-            <p className="text-sm uppercase tracking-wide text-blue-400">Hi — I'm</p>
-            <h2 className="text-4xl md:text-5xl font-extrabold leading-tight mt-2">Timileyin — a Creative Technologist</h2>
-            <p className="mt-6 max-w-xl opacity-80">I blend design, motion, and frontend engineering to create product experiences that are clear, engaging, and purposeful — from visual identity to interaction and performance.</p>
-            <div className="mt-8 flex gap-4">
-              <a href="#projects" className="inline-block bg-blue-600 text-white px-5 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors">See my work</a>
-              <a href="#contact" className="inline-block border border-slate-600 px-5 py-3 rounded-md hover:border-blue-500 transition-colors">Get in touch</a>
-            </div>
-            <div className="mt-8 flex gap-3 items-center flex-wrap">{skills.map((s) => <span key={s} className="px-3 py-1 rounded-full border border-slate-700 text-sm opacity-90">{s}</span>)}</div>
+            <motion.p
+              variants={fadeUp}
+              className="text-sm uppercase tracking-wide text-blue-400"
+            >
+              Hi — I'm
+            </motion.p>
+
+            <motion.h2
+              variants={fadeUp}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="text-4xl md:text-5xl font-extrabold leading-tight mt-2"
+            >
+              Timileyin — a Creative Technologist
+            </motion.h2>
+
+            <motion.p
+              variants={fadeUp}
+              className="mt-6 max-w-xl opacity-80"
+            >
+              I blend design, motion, and frontend engineering to create product experiences
+              that are clear, engaging, and purposeful — from visual identity to interaction
+              and performance.
+            </motion.p>
+
+            <motion.div
+              variants={fadeUp}
+              className="mt-8 flex gap-4"
+            >
+              <motion.a
+                href="#projects"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                className="inline-block bg-blue-600 text-white px-5 py-3 rounded-md font-medium hover:bg-blue-700 transition-colors"
+              >
+                See my work
+              </motion.a>
+
+              <motion.a
+                href="#contact"
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                className="inline-block border border-slate-600 px-5 py-3 rounded-md hover:border-blue-500 transition-colors"
+              >
+                Get in touch
+              </motion.a>
+            </motion.div>
+
+            {/* Skills */}
+            <motion.div
+              variants={stagger}
+              className="mt-8 flex gap-3 items-center flex-wrap"
+            >
+              {skills.map((s) => (
+                <motion.span
+                  key={s}
+                  variants={fadeUp}
+                  whileHover={{ scale: 1.05 }}
+                  className="px-3 py-1 rounded-full border border-slate-700 text-sm opacity-90"
+                >
+                  {s}
+                </motion.span>
+              ))}
+            </motion.div>
           </div>
-          <div className="order-first md:order-last flex justify-center md:justify-end">
-            <div className="w-[300px] h-[300px] md:w-[340px] md:h-[410px] rounded-xl overflow-hidden shadow-2xl bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
-              <img src="/Profile 1.png" alt="me" className="rounded-lg w-[300px] h-[380px] mt-330px object-cover shadow-lg filter grayscale hover:grayscale-0 transition-all duration-300" />
-            </div>
-          </div>
-        </section>
-        <section id="about" className="mt-20">
-          <h3 className="text-2xl font-bold border-l-4 border-blue-500 pl-4">About me</h3>
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-            <div className="md:col-span-1"><img src="/About2.png" alt="me" className="rounded-lg w-full object-cover shadow-lg grayscale-0 transition-all duration-300" /></div>
-            <div className="md:col-span-2"><p className="opacity-85">With over 4 years of practical experience in the creative and tech space, I specialize in designing impactful brand identities, creating engaging motion graphics, and building responsive, user-focused front-end interfaces. My work is driven by a deep commitment to clarity, clean visual language, and purposeful animation—ensuring that every project not only looks visually compelling but also communicates meaningfully and converts effectively. I understand the importance of aligning design with strategy, and I take pride in delivering solutions that help brands stand out, connect emotionally with their audience, and achieve their goals across both digital and visual platforms.</p></div>
-          </div>
-        </section>
-        <section id="services" className="mt-20 scroll-mt-20">
-          <h3 className="text-2xl font-bold border-l-4 border-blue-500 pl-4">Services</h3>
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-            {services.map(s => (
-              <div key={s.title} className={`p-6 rounded-2xl border ${dark ? 'border-slate-800 bg-slate-900/50' : 'border-slate-200 bg-slate-50'} hover:scale-[1.02] transition-transform`}>
-                <div className="w-10 h-10 mb-4 rounded-lg bg-blue-600 flex items-center justify-center text-white">{s.title.includes('Motion') ? <Monitor size={20}/> : s.title.includes('Graphic') ? <PenTool size={20}/> : <Code size={20}/>}</div>
-                <h4 className="font-semibold text-lg">{s.title}</h4><p className="mt-2 opacity-80 text-sm">{s.desc}</p>
+
+          {/* RIGHT */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 0.8, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="order-first md:order-last flex justify-center md:justify-end"
+          >
+            <motion.div
+              animate={{ y: [0, -12, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="w-[300px] h-[300px] md:w-[340px] md:h-[410px] rounded-xl overflow-hidden shadow-2xl bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center"
+            >
+              <motion.img
+                src="/Profile 2.png"
+                alt="me"
+                whileHover={{ scale: 1.03 }}
+                transition={{ duration: 0.3 }}
+                className="rounded-lg w-[300px] h-[380px] object-cover shadow-lg filter grayscale hover:grayscale-0 transition-all duration-300"
+              />
+            </motion.div>
+          </motion.div>
+        </motion.section>
+
+        <motion.section
+        id="about"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        className="mt-20"
+      >
+        <motion.h3
+          variants={fadeLeft}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="text-2xl font-bold border-l-4 border-blue-500 pl-4"
+        >
+          About me
+        </motion.h3>
+
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+          {/* Image */}
+          <motion.div
+            variants={fadeUp}
+            transition={{ duration: 1 }}
+            className="md:col-span-1"
+          >
+            <motion.img
+              src="/About2.png"
+              alt="me"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 2 }}
+              className="rounded-lg w-full object-cover shadow-lg transition-all duration-300"
+            />
+          </motion.div>
+
+          {/* Text */}
+          <motion.div
+            variants={fadeUp}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="md:col-span-2"
+          >
+            <p className="opacity-85 leading-relaxed">
+              With over 4 years of practical experience in the creative and tech space,
+              I specialize in designing impactful brand identities, creating engaging
+              motion graphics, and building responsive, user-focused front-end interfaces.
+              My work is driven by a deep commitment to clarity, clean visual language,
+              and purposeful animation—ensuring that every project not only looks visually
+              compelling but also communicates meaningfully and converts effectively.
+              I understand the importance of aligning design with strategy, and I take
+              pride in delivering solutions that help brands stand out, connect emotionally
+              with their audience, and achieve their goals across both digital and visual
+              platforms.
+            </p>
+          </motion.div>
+        </div>
+      </motion.section>
+
+        <motion.section
+        id="services"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        className="mt-20 scroll-mt-20"
+      >
+        <motion.h3
+          variants={fadeLeft}
+          transition={{ duration: 0.7 }}
+          className="text-2xl font-bold border-l-4 border-blue-500 pl-4"
+        >
+          Services
+        </motion.h3>
+
+        <motion.div
+          variants={{
+            visible: {
+              transition: { staggerChildren: 0.12 }
+            }
+          }}
+          className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6"
+        >
+          {services.map((s) => (
+            <motion.div
+              key={s.title}
+              variants={fadeUp}
+              whileHover={{ y: -6, scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+              className={`p-6 rounded-2xl border ${
+                dark
+                  ? "border-slate-800 bg-slate-900/50"
+                  : "border-slate-200 bg-slate-50"
+              }`}
+            >
+              <div className="w-10 h-10 mb-4 rounded-lg bg-blue-600 flex items-center justify-center text-white">
+                {s.title.includes("Motion") ? (
+                  <Monitor size={20} />
+                ) : s.title.includes("Graphic") ? (
+                  <PenTool size={20} />
+                ) : (
+                  <Code size={20} />
+                )}
               </div>
-            ))}
-          </div>
-        </section>
-        <section id="projects" className="mt-20">
-          <div className="flex items-center justify-between">
-            <h3 className="text-2xl font-bold border-l-4 border-blue-500 pl-4">Recent Work</h3>
-            <button onClick={() => setShowAllProjectsModal(true)} className="text-sm opacity-80 hover:text-blue-500 hover:underline transition-colors flex items-center gap-2">View all projects <ArrowRight size={16} /></button>
-          </div>
-          {loadingProjects ? (
-            <div className="mt-6 text-center py-12"><p className="opacity-70">Loading projects...</p></div>
-          ) : (
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {projects.slice(0, 6).map(project => {
-                const firstMedia = project.media && Array.isArray(project.media) && project.media.length > 0 ? project.media[0] : project.mediaUrl ? { type: project.type === 'motion' ? 'video' : 'image', url: project.mediaUrl } : null;
-                const hasMultipleMedia = project.media && Array.isArray(project.media) && project.media.length > 1;
-                return (
-                  <article key={project.id} className="rounded-lg overflow-hidden group bg-slate-900/40 border border-slate-800 cursor-pointer relative" onClick={() => setSelectedProject(project)}>
-                    <div className="relative aspect-video bg-black flex items-center justify-center overflow-hidden">
-                      {firstMedia && (firstMedia.type === 'video' ? <video src={firstMedia.url} className="w-full h-full group-hover:scale-105 transition-transform" style={{ objectFit: 'contain' }} muted /> : <img src={firstMedia.url} alt={project.title} className="w-full h-full group-hover:scale-105 transition-transform" style={{ objectFit: 'contain' }} />)}
-                      {hasMultipleMedia && <div className="absolute top-2 right-2"><span className="px-2 py-1 bg-black/70 backdrop-blur-sm text-white text-xs font-semibold rounded flex items-center gap-1"><Layers className="w-3 h-3" />{project.media.length}</span></div>}
-                    </div>
-                    <div className="p-4"><h4 className="font-semibold">{project.title}</h4><p className="text-sm opacity-80 mt-1">{project.type}</p></div>
-                  </article>
-                );
-              })}
-            </div>
-          )}
-        </section>
-        <section id="testimonials" className="mt-20">
-          <h3 className="text-2xl font-bold border-l-4 border-blue-500 pl-4">Testimonials</h3>
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-            {testimonials.map(t => <blockquote key={t.id} className="p-6 rounded-xl border border-slate-700 hover:scale-[1.02] transition-transform"><p className="italic">"{t.quote}"</p><footer className="mt-3 text-sm font-semibold">— {t.name}</footer></blockquote>)}
-          </div>
-        </section>
-        <section id="blog" className="mt-20">
-          <h3 className="text-2xl font-bold border-l-4 border-blue-500 pl-4">Blog</h3>
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6 ">
-            <article className="p-4 rounded-lg border border-slate-700 hover:scale-[1.02] transition-transform"><h5 className="font-semibold ">How I approach motion design</h5><p className="mt-2 text-sm opacity-80 italic">Exciting insights loading... stay tuned!</p></article>
-            <article className="p-4 rounded-lg border border-slate-700 hover:scale-[1.02] transition-transform"><h5 className="font-semibold">Design systems for solo creators</h5><p className="mt-2 text-sm opacity-80 italic">Exciting insights loading... stay tuned!</p></article>
-            <article className="p-4 rounded-lg border border-slate-700 hover:scale-[1.02] transition-transform"><h5 className="font-semibold">Animation tips for web</h5><p className="mt-2 text-sm opacity-80 italic">Exciting insights loading... stay tuned!</p></article>
-          </div>
-        </section>
-        <section id="contact" className="mt-20 mb-12 scroll-mt-20">
-          <h3 className="text-2xl font-bold border-l-4 border-blue-500 pl-4">Contact</h3>
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className={`p-8 md:p-12 rounded-2xl shadow-2xl ${dark ? "bg-gray-900 border border-gray-800" : "bg-white border border-gray-100"}`}>
-              {submitStatus === "success" ? (
-                <div className="text-center py-12"><CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" /><h3 className="text-2xl font-bold mb-2">Message Sent!</h3><p className="opacity-70">I'll get back to you as soon as possible.</p><button onClick={() => setSubmitStatus('idle')} className="mt-6 text-blue-500 underline">Send another</button></div>
-              ) : (
-                <form onSubmit={submitContact} className="space-y-4">
-                  <input name="name" value={form.name} onChange={handleInput} placeholder="Your name" className={`w-full p-3 rounded-md border ${dark ? 'border-slate-700 bg-black/30' : 'border-slate-200 bg-slate-50'} focus:border-blue-500 outline-none transition-colors`} required />
-                  <input name="email" type="email" value={form.email} onChange={handleInput} placeholder="Your email" className={`w-full p-3 rounded-md border ${dark ? 'border-slate-700 bg-black/30' : 'border-slate-200 bg-slate-50'} focus:border-blue-500 outline-none transition-colors`} required />
-                  <textarea name="message" value={form.message} onChange={handleInput} placeholder="Message" rows={6} className={`w-full p-3 rounded-md border ${dark ? 'border-slate-700 bg-black/30' : 'border-slate-200 bg-slate-50'} focus:border-blue-500 outline-none transition-colors`} required />
-                  <div className="flex flex-col md:flex-row gap-4 mt-4">
-                    <button type="submit" className="w-full md:w-1/2 bg-blue-600 text-white px-5 py-3 rounded-md font-medium hover:bg-blue-700 flex justify-center items-center gap-2" disabled={submitStatus === "sending"}>{submitStatus === "sending" ? "Sending..." : <><Send size={16} /> Send Message</>}</button>
-                    <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="w-full md:w-1/2 bg-green-500 text-white px-5 py-3 rounded-md font-medium hover:bg-green-600 flex justify-center items-center gap-2">Chat on WhatsApp</a>
-                  </div>
-                </form>
+
+              <h4 className="font-semibold text-lg">{s.title}</h4>
+              <p className="mt-2 opacity-80 text-sm">{s.desc}</p>
+            </motion.div>
+          ))}
+        </motion.div>
+      </motion.section>
+
+        <motion.section
+  id="projects"
+  initial="hidden"
+  whileInView="visible"
+  viewport={{ once: true, margin: "-100px" }}
+  className="mt-20"
+>
+  {/* Header */}
+  <div className="flex items-center justify-between">
+    <motion.h3
+      variants={fadeLeft}
+      transition={{ duration: 0.5 }}
+      className="text-2xl font-bold border-l-4 border-blue-500 pl-4"
+    >
+      Recent Work
+    </motion.h3>
+
+    <motion.button
+      onClick={() => setShowAllProjectsModal(true)}
+      whileHover={{ x: 4 }}
+      whileTap={{ scale: 0.97 }}
+      className="text-sm opacity-80 hover:text-blue-500 hover:underline transition-colors flex items-center gap-2"
+    >
+      View all projects <ArrowRight size={16} />
+    </motion.button>
+  </div>
+
+  {/* Loading */}
+  {loadingProjects ? (
+    <div className="mt-6 text-center py-12">
+      <p className="opacity-70">Loading projects...</p>
+    </div>
+  ) : (
+    <motion.div
+      variants={{
+        visible: { transition: { staggerChildren: 0.12 } }
+      }}
+      className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+    >
+      {projects.slice(0, 6).map(project => {
+        const firstMedia =
+          project.media && Array.isArray(project.media) && project.media.length > 0
+            ? project.media[0]
+            : project.mediaUrl
+            ? {
+                type: project.type === "motion" ? "video" : "image",
+                url: project.mediaUrl
+              }
+            : null;
+
+        const hasMultipleMedia =
+          project.media && Array.isArray(project.media) && project.media.length > 1;
+
+        return (
+          <motion.article
+            key={project.id}
+            variants={fadeUp}
+            whileHover={{ y: -6 }}
+            whileTap={{ scale: 0.98 }}
+            transition={{ duration: 0.3 }}
+            className="rounded-lg overflow-hidden group bg-slate-900/40 border border-slate-800 cursor-pointer relative"
+            onClick={() => setSelectedProject(project)}
+          >
+            {/* Media */}
+            <div className="relative aspect-video bg-black flex items-center justify-center overflow-hidden">
+              {firstMedia &&
+                (firstMedia.type === "video" ? (
+                  <video
+                    src={firstMedia.url}
+                    className="w-full h-full group-hover:scale-105 transition-transform duration-500"
+                    style={{ objectFit: "contain" }}
+                    muted
+                  />
+                ) : (
+                  <img
+                    src={firstMedia.url}
+                    alt={project.title}
+                    className="w-full h-full group-hover:scale-105 transition-transform duration-500"
+                    style={{ objectFit: "contain" }}
+                  />
+                ))}
+
+              {/* Media count */}
+              {hasMultipleMedia && (
+                <div className="absolute top-2 right-2">
+                  <span className="px-2 py-1 bg-black/70 backdrop-blur-sm text-white text-xs font-semibold rounded flex items-center gap-1">
+                    <Layers className="w-3 h-3" />
+                    {project.media.length}
+                  </span>
+                </div>
               )}
+
+              {/* Hover overlay (subtle) */}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
             </div>
-            <div className={`p-8 rounded-2xl border ${dark ? "border-slate-800 bg-gray-900/50" : "border-slate-200 bg-white"}`}>
-              <h4 className="font-semibold text-xl">Let's work together</h4>
-              <p className="mt-4 opacity-80 leading-relaxed">Have a project in mind? Looking for a long-term partner? I am currently open for new opportunities.</p>
-              <div className="mt-8 space-y-4">
-                <div><span className="text-xs uppercase tracking-wider opacity-50 block mb-1">Email</span><a href="mailto:olatunjit593@gmail.com" className="text-lg hover:text-blue-500 transition-colors">olatunjit593@gmail.com</a></div>
-                <div><span className="text-xs uppercase tracking-wider opacity-50 block mb-1">Status</span><div className="flex items-center gap-2 text-green-500"><span className="relative flex h-3 w-3"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span></span>Available for work</div></div>
+
+            {/* Meta */}
+            <div className="p-4">
+              <h4 className="font-semibold">{project.title}</h4>
+              <p className="text-sm opacity-80 mt-1">{project.type}</p>
+            </div>
+          </motion.article>
+        );
+      })}
+    </motion.div>
+  )}
+</motion.section>
+
+        <motion.section
+        id="testimonials"
+        className="mt-20"
+        variants={stagger}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <motion.h3
+          className="text-2xl font-bold border-l-4 border-blue-500 pl-4"
+          variants={fadeUp}
+        >
+          Testimonials
+        </motion.h3>
+
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {testimonials.map((t) => (
+            <motion.blockquote
+              key={t.id}
+              className="p-6 rounded-xl border border-slate-700"
+              variants={fadeUp}
+              whileHover={{ scale: 1.03 }}
+              transition={{ type: "spring", stiffness: 120 }}
+            >
+              <p className="italic">"{t.quote}"</p>
+              <footer className="mt-3 text-sm font-semibold">— {t.name}</footer>
+            </motion.blockquote>
+          ))}
+        </div>
+      </motion.section>
+
+        <motion.section
+        id="blog"
+        className="mt-20"
+        variants={stagger}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <motion.h3
+          className="text-2xl font-bold border-l-4 border-blue-500 pl-4"
+          variants={fadeUp}
+        >
+          Blog
+        </motion.h3>
+
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            "How I approach motion design",
+            "Design systems for solo creators",
+            "Animation tips for web",
+          ].map((title, idx) => (
+            <motion.article
+              key={idx}
+              className="p-4 rounded-lg border border-slate-700"
+              variants={fadeUp}
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 120 }}
+            >
+              <h5 className="font-semibold">{title}</h5>
+              <p className="mt-2 text-sm opacity-80 italic">
+                Exciting insights loading... stay tuned!
+              </p>
+            </motion.article>
+          ))}
+        </div>
+      </motion.section>
+
+        <motion.section
+        id="contact"
+        className="mt-20 mb-12 scroll-mt-20"
+        variants={stagger}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        <motion.h3
+          className="text-2xl font-bold border-l-4 border-blue-500 pl-4"
+          variants={fadeUp}
+        >
+          Contact
+        </motion.h3>
+
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Contact Form */}
+          <motion.div
+            className={`p-8 md:p-12 rounded-2xl shadow-2xl ${dark ? "bg-gray-900 border border-gray-800" : "bg-white border border-gray-100"}`}
+            variants={fadeUp}
+          >
+            {submitStatus === "success" ? (
+              <motion.div
+                className="text-center py-12"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+              >
+                <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+                <h3 className="text-2xl font-bold mb-2">Message Sent!</h3>
+                <p className="opacity-70">I'll get back to you as soon as possible.</p>
+                <button onClick={() => setSubmitStatus('idle')} className="mt-6 text-blue-500 underline">
+                  Send another
+                </button>
+              </motion.div>
+            ) : (
+              <form onSubmit={submitContact} className="space-y-4">
+                <input
+                  name="name"
+                  value={form.name}
+                  onChange={handleInput}
+                  placeholder="Your name"
+                  className={`w-full p-3 rounded-md border ${dark ? 'border-slate-700 bg-black/30' : 'border-slate-200 bg-slate-50'} focus:border-blue-500 outline-none transition-colors`}
+                  required
+                />
+                <input
+                  name="email"
+                  type="email"
+                  value={form.email}
+                  onChange={handleInput}
+                  placeholder="Your email"
+                  className={`w-full p-3 rounded-md border ${dark ? 'border-slate-700 bg-black/30' : 'border-slate-200 bg-slate-50'} focus:border-blue-500 outline-none transition-colors`}
+                  required
+                />
+                <textarea
+                  name="message"
+                  value={form.message}
+                  onChange={handleInput}
+                  placeholder="Message"
+                  rows={6}
+                  className={`w-full p-3 rounded-md border ${dark ? 'border-slate-700 bg-black/30' : 'border-slate-200 bg-slate-50'} focus:border-blue-500 outline-none transition-colors`}
+                  required
+                />
+                <div className="flex flex-col md:flex-row gap-4 mt-4">
+                  <button
+                    type="submit"
+                    className="w-full md:w-1/2 bg-blue-600 text-white px-5 py-3 rounded-md font-medium hover:bg-blue-700 flex justify-center items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                    disabled={submitStatus === "sending"}
+                  >
+                    {submitStatus === "sending" ? "Sending..." : <><Send size={16} /> Send Message</>}
+                  </button>
+                  <a
+                    href={`https://wa.me/${whatsappNumber}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full md:w-1/2 bg-green-500 text-white px-5 py-3 rounded-md font-medium hover:bg-green-600 flex justify-center items-center gap-2"
+                  >
+                    Chat on WhatsApp
+                  </a>
+                </div>
+              </form>
+            )}
+          </motion.div>
+
+          {/* Contact Info / Status */}
+          <motion.div
+            className={`p-8 rounded-2xl border ${dark ? "border-slate-800 bg-gray-900/50" : "border-slate-200 bg-white"}`}
+            variants={fadeUp}
+          >
+            <h4 className="font-semibold text-xl">Let's work together</h4>
+            <p className="mt-4 opacity-80 leading-relaxed">
+              Have a project in mind? Looking for a long-term partner? I am currently open for new opportunities.
+            </p>
+            <div className="mt-8 space-y-4">
+              <div>
+                <span className="text-xs uppercase tracking-wider opacity-50 block mb-1">Email</span>
+                <a href="mailto:olatunjit593@gmail.com" className="text-lg hover:text-blue-500 transition-colors">
+                  olatunjit593@gmail.com
+                </a>
+              </div>
+              <div>
+                <span className="text-xs uppercase tracking-wider opacity-50 block mb-1">Status</span>
+                <div className="flex items-center gap-2 text-green-500">
+                  <span className="relative flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                  </span>
+                  Available for work
+                </div>
               </div>
             </div>
-          </div>
-        </section>
-        <footer className={`py-12 border-t 'bg-black border-gray-900' : 'bg-gray-50 border-gray-200'}`}>
-          <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="text-center md:text-left flex items-center gap-2">
-              <img src="/OTC Logo.png" alt="OTC Logo" className="w-20 h-20 object-contain mb-2" />
-              <h4 className="text-2xl font-bold tracking-tighter mb-2 -ml-6"><span className={dark ? 'text-white' : 'text-black'}>O.T Crea8ives</span></h4>
-              <p className={`text-sm ${dark ? 'text-gray-500' : 'text-gray-400'}`}>© {new Date().getFullYear()} Portfolio. All Rights Reserved.</p>
-            </div>
-            <div className="flex gap-6">
-              <a href="https://www.instagram.com/ot.cre8ives/?hl=en" target="_blank" rel="noopener noreferrer" className={`hover:text-blue-500 transition-colors ${dark ? 'text-gray-400' : 'text-gray-600'}`}><Instagram size={24} /></a>
-              <a href="https://x.com/OTimileyin70286" target="_blank" rel="noopener noreferrer" className={`hover:text-blue-500 transition-colors ${dark ? 'text-gray-400' : 'text-gray-600'}`}><Twitter size={24} /></a>
-              <a href="https://www.linkedin.com/in/timileyin-olatunji-6a3abb317" target="_blank" rel="noopener noreferrer" className={`hover:text-blue-500 transition-colors ${dark ? 'text-gray-400' : 'text-gray-600'}`}><Linkedin size={24} /></a>
-              <a href="https://github.com/Timileyin101" target="_blank" rel="noopener noreferrer" className={`hover:text-blue-500 transition-colors ${dark ? 'text-gray-400' : 'text-gray-600'}`}><Github size={24} /></a>
-            </div>
-          </div>
-        </footer>
+          </motion.div>
+        </div>
+      </motion.section>
+
+        <footer className={`py-12 border-t ${dark ? 'bg-black border-gray-900' : 'bg-gray-50 border-gray-200'}`}>
+    <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div className="text-center md:text-left flex items-center gap-2">
+        <img src="/OTC Logo.png" alt="OTC Logo" className="w-20 h-20 object-contain mb-2" />
+        <h4 className="text-2xl font-bold tracking-tighter mb-2 -ml-6">
+          <span className={dark ? 'text-white' : 'text-black'}>O.T Crea8ives</span>
+        </h4>
+        <p className={`text-sm ${dark ? 'text-gray-500' : 'text-gray-400'}`}>
+          © {new Date().getFullYear()} Portfolio. All Rights Reserved.
+        </p>
+      </div>
+
+      <div className="flex gap-6">
+        <a href="https://www.instagram.com/ot.cre8ives/?hl=en" target="_blank" rel="noopener noreferrer" className={`hover:text-blue-500 transition-colors ${dark ? 'text-gray-400' : 'text-gray-600'}`}>
+          <Instagram size={24} />
+        </a>
+        <a href="https://x.com/OTimileyin70286" target="_blank" rel="noopener noreferrer" className={`hover:text-blue-500 transition-colors ${dark ? 'text-gray-400' : 'text-gray-600'}`}>
+          <Twitter size={24} />
+        </a>
+        <a href="https://www.linkedin.com/in/timileyin-olatunji-6a3abb317" target="_blank" rel="noopener noreferrer" className={`hover:text-blue-500 transition-colors ${dark ? 'text-gray-400' : 'text-gray-600'}`}>
+          <Linkedin size={24} />
+        </a>
+        <a href="https://github.com/Timileyin101" target="_blank" rel="noopener noreferrer" className={`hover:text-blue-500 transition-colors ${dark ? 'text-gray-400' : 'text-gray-600'}`}>
+          <Github size={24} />
+        </a>
+      </div>
+    </div>
+  </footer>
+
       </div>
       {showAllProjectsModal && <AllProjectsModal onClose={() => setShowAllProjectsModal(false)} onSelectProject={setSelectedProject} />}
       {selectedProject && <ProjectPreviewModal project={selectedProject} onClose={() => setSelectedProject(null)} />}
