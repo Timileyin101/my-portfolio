@@ -6,7 +6,7 @@ import {
   Twitter, Github, Briefcase, Layers, Video, Image, Globe, CheckCircle, 
   Plus, XCircle, Trash2, ChevronLeft, ChevronRight, Eye
 } from 'lucide-react';
-import { motion } from "framer-motion";
+import { motion, easeOut } from "framer-motion";
 import { collection, getDocs, DocumentData } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import emailjs from "@emailjs/browser";
@@ -123,7 +123,7 @@ const fadeUp = {
     y: 0,
     transition: {
       duration: 0.4,
-      ease: "easeOut",
+      ease: easeOut,
     },
   },
 };
