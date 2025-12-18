@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { doc, getDoc, collection, query, orderBy, onSnapshot, deleteDoc } from 'firebase/firestore';
@@ -21,7 +21,7 @@ interface ToastMessage {
 
 interface UseToastReturn {
   showToast: (type: ToastType, message: string) => void;
-  ToastContainer: () => JSX.Element;
+  ToastContainer: () => ReactNode;
 }
 
 function useToast(): UseToastReturn {
