@@ -24,6 +24,13 @@ type Project = {
   [key: string]: any;
 };
 
+interface FormState {
+  name: string;
+  email: string;
+  message: string;
+}
+
+
 export default function PortfolioPage() {
   const [dark, setDark] = useState(true);
   const [form, setForm] = useState({ name: '', email: '', message: '' });
@@ -66,31 +73,39 @@ export default function PortfolioPage() {
     { id: 2, name: 'Lekan A., Product Lead, TechHive', quote: 'Exceptionally reliable and highly skilled — I would confidently recommend him to anyone.' },
   ];
 
-  function handleInput(e) {
+   // ✅ Correctly typed input handler
+  function handleInput(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));
   }
 
-  async function submitContact(e) {
+  // ✅ Correctly typed form submit handler
+  async function submitContact(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     if (submitStatus === "sending") return;
     setSubmitStatus("sending");
+
     try {
+      // Send email to yourself
       await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_CLIENT_TO_ME,
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_CLIENT_TO_ME!,
         { from_name: form.name, from_email: form.email, message: form.message },
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
       );
+
+      // Send auto-reply to user
       await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_AUTO_REPLY,
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_AUTO_REPLY!,
         { to_name: form.name, to_email: form.email },
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
       );
+
       setSubmitStatus("success");
       setForm({ name: "", email: "", message: "" });
-    } catch (err) {
+    } catch (err: any) {
       console.error("EmailJS error:", err?.text || err);
       setSubmitStatus("error");
       setTimeout(() => setSubmitStatus("idle"), 3000);
