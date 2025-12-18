@@ -145,7 +145,7 @@ const fadeLeft = {
 // MAIN COMPONENT
 // ============================================
 
-export default function PortfolioPage(): JSX.Element {
+export default function PortfolioPage(){
   // State management with proper types
   const [dark, setDark] = useState<boolean>(true);
   const [form, setForm] = useState<FormState>({ name: '', email: '', message: '' });

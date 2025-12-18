@@ -30,7 +30,7 @@ const app: FirebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) 
 const auth: Auth = getAuth(app);
 // ------------------------------
 
-export default function LoginPage(): JSX.Element {
+export default function LoginPage(){
   const router = useRouter();
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');

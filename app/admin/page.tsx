@@ -37,7 +37,7 @@ function useToast(): UseToastReturn {
   }, []);
 
   const ToastContainer = useMemo(() => {
-    return function ToastDisplay(): JSX.Element {
+    return function ToastDisplay(){
       return (
         <div className="fixed top-5 right-5 z-[9999] flex flex-col gap-3 max-w-md pointer-events-none">
           {toasts.map((toast) => (
@@ -96,7 +96,7 @@ interface ProjectPreviewProps {
   onDelete: (id: string, title: string) => void;
 }
 
-function ProjectPreview({ project, onClose, onDelete }: ProjectPreviewProps): JSX.Element {
+function ProjectPreview({ project, onClose, onDelete }: ProjectPreviewProps){
   // State to track which media item is currently being viewed
   const [currentMediaIndex, setCurrentMediaIndex] = useState<number>(0);
   
@@ -333,7 +333,7 @@ interface ProjectCardProps {
   onDelete: (id: string, title: string) => void;
 }
 
-function ProjectCard({ project, onPreview, onDelete }: ProjectCardProps): JSX.Element {
+function ProjectCard({ project, onPreview, onDelete }: ProjectCardProps){
   // CHANGE #11: Get first media item for card preview, supporting both formats
   const firstMedia = useMemo((): MediaItem | null => {
     if (project.media && Array.isArray(project.media) && project.media.length > 0) {
@@ -469,7 +469,7 @@ function ProjectCard({ project, onPreview, onDelete }: ProjectCardProps): JSX.El
 // MAIN ADMIN COMPONENT
 // ===========================
 // NOTE: Main component unchanged - all modifications were in child components
-export default function AdminPage(): JSX.Element {
+export default function AdminPage(){
   const router = useRouter();
   const [user, setUser] = useState<User | null | undefined>(undefined);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
