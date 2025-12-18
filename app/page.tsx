@@ -19,11 +19,16 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import emailjs from "@emailjs/browser";
 
+type Project = {
+  id: string;
+  [key: string]: any;
+};
+
 export default function PortfolioPage() {
   const [dark, setDark] = useState(true);
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [submitStatus, setSubmitStatus] = useState('idle');
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [loadingProjects, setLoadingProjects] = useState(true);
   const [showAllProjectsModal, setShowAllProjectsModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
