@@ -65,7 +65,7 @@ interface ProjectTypeOption {
   icon: React.ComponentType<{ className?: string }>;
 }
 
-export default function UploadForm({ user, initialData, onFinish, showToast }: UploadFormProps): JSX.Element {
+export default function UploadForm({ user, initialData, onFinish, showToast }: UploadFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
