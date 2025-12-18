@@ -30,6 +30,27 @@ interface FormState {
   message: string;
 }
 
+interface MediaItem {
+  type: "image" | "video";
+  url: string;
+}
+
+// Define the type of a single project
+interface Project {
+  id: string;
+  title: string;
+  description?: string;
+  type?: string; // e.g., 'motion', 'design'
+  media?: MediaItem[]; // array of media objects
+  mediaUrl?: string; // fallback single media URL
+}
+
+// Props for the modal
+interface ProjectPreviewModalProps {
+  project: Project;
+  onClose: () => void;
+}
+
 
 export default function PortfolioPage() {
   const [dark, setDark] = useState(true);
@@ -151,31 +172,40 @@ export default function PortfolioPage() {
       visible: { opacity: 1, x: 0 }
     };
 
-  // PROJECT PREVIEW MODAL WITH GALLERY
-  const ProjectPreviewModal = ({ project, onClose }) => {
-    const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
-    const mediaItems = useMemo(() => {
-      if (project.media && Array.isArray(project.media) && project.media.length > 0) return project.media;
-      if (project.mediaUrl) return [{ type: project.type === 'motion' ? 'video' : 'image', url: project.mediaUrl }];
-      return [];
-    }, [project]);
-    const currentMedia = mediaItems[currentMediaIndex];
-    const hasMultipleMedia = mediaItems.length > 1;
-    const goToNext = () => setCurrentMediaIndex((prev) => (prev + 1) % mediaItems.length);
-    const goToPrevious = () => setCurrentMediaIndex((prev) => (prev - 1 + mediaItems.length) % mediaItems.length);
-    useEffect(() => {
-      const handleKeyPress = (e) => {
-        if (e.key === 'ArrowRight' && hasMultipleMedia) goToNext();
-        else if (e.key === 'ArrowLeft' && hasMultipleMedia) goToPrevious();
-        else if (e.key === 'Escape') onClose();
-      };
-      window.addEventListener('keydown', handleKeyPress);
-      return () => window.removeEventListener('keydown', handleKeyPress);
-    }, [hasMultipleMedia, onClose]);
-    if (!project) return null;
-    return (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4" onClick={onClose}>
-    <div className="relative w-2x1 max-w-2xl max-h-[95vh] overflow-auto bg-slate-900 rounded-2xl border border-slate-800" onClick={(e) => e.stopPropagation()}>
+const ProjectPreviewModal: React.FC<ProjectPreviewModalProps> = ({ project, onClose }) => {
+  const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
+
+  const mediaItems: MediaItem[] = useMemo(() => {
+    if (project.media && Array.isArray(project.media) && project.media.length > 0) return project.media;
+    if (project.mediaUrl)
+      return [{ type: project.type === "motion" ? "video" : "image", url: project.mediaUrl }];
+    return [];
+  }, [project]);
+
+  const currentMedia = mediaItems[currentMediaIndex];
+  const hasMultipleMedia = mediaItems.length > 1;
+
+  const goToNext = () => setCurrentMediaIndex((prev) => (prev + 1) % mediaItems.length);
+  const goToPrevious = () => setCurrentMediaIndex((prev) => (prev - 1 + mediaItems.length) % mediaItems.length);
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight" && hasMultipleMedia) goToNext();
+      else if (e.key === "ArrowLeft" && hasMultipleMedia) goToPrevious();
+      else if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, [hasMultipleMedia, onClose]);
+
+  if (!project) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4" onClick={onClose}>
+      <div
+        className="relative w-2x1 max-w-2xl max-h-[95vh] overflow-auto bg-slate-900 rounded-2xl border border-slate-800"
+        onClick={(e) => e.stopPropagation()}
+      >
       
       {/* Header Section */}
       <div className="sticky top-0 bg-slate-900/95 backdrop-blur-sm border-b border-slate-800 p-6 z-10">
