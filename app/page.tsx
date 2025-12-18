@@ -94,11 +94,30 @@ export default function PortfolioPage() {
 
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER;
 
-  const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0 }
-};
+      const staggerContainer = {
+      hidden: {},
+      visible: {
+        transition: {
+          staggerChildren: 0.08,
+          delayChildren: 0.1,
+        },
+      },
+    };
 
+    const fadeUp = {
+      hidden: {
+        opacity: 0,
+        y: 12,
+      },
+      visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+          duration: 0.4,
+          ease: "easeOut",
+        },
+      },
+    };
     const stagger = {
       visible: {
         transition: {
@@ -398,7 +417,7 @@ export default function PortfolioPage() {
               }}
               className="hidden md:flex gap-6 text-sm opacity-85"
             >
-              {["About", "Services", "Work", "Contact"].map((item, i) => (
+              {["About", "Services", "Projects", "Contact"].map((item, i) => (
                 <motion.a
                   key={i}
                   href={`#${item.toLowerCase()}`}
@@ -483,20 +502,25 @@ export default function PortfolioPage() {
 
             {/* Skills */}
             <motion.div
-              variants={stagger}
-              className="mt-8 flex gap-3 items-center flex-wrap"
-            >
-              {skills.map((s) => (
-                <motion.span
-                  key={s}
-                  variants={fadeUp}
-                  whileHover={{ scale: 1.05 }}
-                  className="px-3 py-1 rounded-full border border-slate-700 text-sm opacity-90"
-                >
-                  {s}
-                </motion.span>
-              ))}
-            </motion.div>
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="mt-8 flex gap-3 items-center flex-wrap"
+          >
+            {skills.map((skill) => (
+              <motion.span
+                key={skill}
+                variants={fadeUp}
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="px-3 py-1 rounded-full border border-slate-700 text-sm opacity-90 cursor-default"
+              >
+                {skill}
+              </motion.span>
+            ))}
+          </motion.div>
+
           </div>
 
           {/* RIGHT */}
@@ -548,7 +572,7 @@ export default function PortfolioPage() {
               src="/About2.png"
               alt="me"
               whileHover={{ scale: 1.02 }}
-              transition={{ duration: 2 }}
+              transition={{ duration: 1 }}
               className="rounded-lg w-full object-cover shadow-lg transition-all duration-300"
             />
           </motion.div>
@@ -628,112 +652,112 @@ export default function PortfolioPage() {
       </motion.section>
 
         <motion.section
-  id="projects"
-  initial="hidden"
-  whileInView="visible"
-  viewport={{ once: true, margin: "-100px" }}
-  className="mt-20"
->
-  {/* Header */}
-  <div className="flex items-center justify-between">
-    <motion.h3
-      variants={fadeLeft}
-      transition={{ duration: 0.5 }}
-      className="text-2xl font-bold border-l-4 border-blue-500 pl-4"
-    >
-      Recent Work
-    </motion.h3>
-
-    <motion.button
-      onClick={() => setShowAllProjectsModal(true)}
-      whileHover={{ x: 4 }}
-      whileTap={{ scale: 0.97 }}
-      className="text-sm opacity-80 hover:text-blue-500 hover:underline transition-colors flex items-center gap-2"
-    >
-      View all projects <ArrowRight size={16} />
-    </motion.button>
-  </div>
-
-  {/* Loading */}
-  {loadingProjects ? (
-    <div className="mt-6 text-center py-12">
-      <p className="opacity-70">Loading projects...</p>
-    </div>
-  ) : (
-    <motion.div
-      variants={{
-        visible: { transition: { staggerChildren: 0.12 } }
-      }}
-      className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-    >
-      {projects.slice(0, 6).map(project => {
-        const firstMedia =
-          project.media && Array.isArray(project.media) && project.media.length > 0
-            ? project.media[0]
-            : project.mediaUrl
-            ? {
-                type: project.type === "motion" ? "video" : "image",
-                url: project.mediaUrl
-              }
-            : null;
-
-        const hasMultipleMedia =
-          project.media && Array.isArray(project.media) && project.media.length > 1;
-
-        return (
-          <motion.article
-            key={project.id}
+        id="projects"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        className="mt-20"
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <motion.h3
             variants={fadeUp}
-            whileHover={{ y: -6 }}
-            whileTap={{ scale: 0.98 }}
-            transition={{ duration: 0.3 }}
-            className="rounded-lg overflow-hidden group bg-slate-900/40 border border-slate-800 cursor-pointer relative"
-            onClick={() => setSelectedProject(project)}
+            className="text-2xl font-bold border-l-4 border-blue-500 pl-4"
           >
-            {/* Media */}
-            <div className="relative aspect-video bg-black flex items-center justify-center overflow-hidden">
-              {firstMedia &&
-                (firstMedia.type === "video" ? (
-                  <video
-                    src={firstMedia.url}
-                    className="w-full h-full group-hover:scale-105 transition-transform duration-500"
-                    style={{ objectFit: "contain" }}
-                    muted
-                  />
-                ) : (
-                  <img
-                    src={firstMedia.url}
-                    alt={project.title}
-                    className="w-full h-full group-hover:scale-105 transition-transform duration-500"
-                    style={{ objectFit: "contain" }}
-                  />
-                ))}
+            Recent Work
+          </motion.h3>
 
-              {/* Media count */}
-              {hasMultipleMedia && (
-                <div className="absolute top-2 right-2">
-                  <span className="px-2 py-1 bg-black/70 backdrop-blur-sm text-white text-xs font-semibold rounded flex items-center gap-1">
-                    <Layers className="w-3 h-3" />
-                    {project.media.length}
-                  </span>
-                </div>
-              )}
+          <motion.button
+            onClick={() => setShowAllProjectsModal(true)}
+            whileHover={{ x: 4 }}
+            whileTap={{ scale: 0.97 }}
+            className="text-sm opacity-80 hover:text-blue-500 hover:underline transition-colors flex items-center gap-2"
+          >
+            View all projects <ArrowRight size={16} />
+          </motion.button>
+        </div>
 
-              {/* Hover overlay (subtle) */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-            </div>
+        {/* Loading */}
+        {loadingProjects ? (
+          <div className="mt-6 text-center py-12">
+            <p className="opacity-70">Loading projects...</p>
+          </div>
+        ) : (
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {projects.slice(0, 6).map((project) => {
+              const firstMedia =
+                project.media && Array.isArray(project.media) && project.media.length > 0
+                  ? project.media[0]
+                  : project.mediaUrl
+                  ? {
+                      type: project.type === "motion" ? "video" : "image",
+                      url: project.mediaUrl,
+                    }
+                  : null;
 
-            {/* Meta */}
-            <div className="p-4">
-              <h4 className="font-semibold">{project.title}</h4>
-              <p className="text-sm opacity-80 mt-1">{project.type}</p>
-            </div>
-          </motion.article>
-        );
-      })}
-    </motion.div>
-  )}
-</motion.section>
+              const hasMultipleMedia =
+                project.media && Array.isArray(project.media) && project.media.length > 1;
+
+              return (
+                <motion.article
+                  key={project.id}
+                  variants={fadeUp}
+                  whileHover={{ y: -4 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.25 }}
+                  className="rounded-lg overflow-hidden group bg-slate-900/40 border border-slate-800 cursor-pointer relative"
+                  onClick={() => setSelectedProject(project)}
+                >
+                  {/* Media */}
+                  <div className="relative aspect-video bg-black flex items-center justify-center overflow-hidden">
+                    {firstMedia &&
+                      (firstMedia.type === "video" ? (
+                        <video
+                          src={firstMedia.url}
+                          muted
+                          playsInline
+                          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                        />
+                      ) : (
+                        <img
+                          src={firstMedia.url}
+                          alt={project.title}
+                          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                        />
+                      ))}
+
+                    {/* Media count badge */}
+                    {hasMultipleMedia && (
+                      <div className="absolute top-2 right-2">
+                        <span className="px-2 py-1 bg-black/70 backdrop-blur-sm text-white text-xs font-semibold rounded flex items-center gap-1">
+                          <Layers className="w-3 h-3" />
+                          {project.media.length}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Hover overlay */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+                  </div>
+
+                  {/* Meta */}
+                  <div className="p-4">
+                    <h4 className="font-semibold">{project.title}</h4>
+                    <p className="text-sm opacity-80 mt-1">{project.type}</p>
+                  </div>
+                </motion.article>
+              );
+            })}
+          </motion.div>
+        )}
+      </motion.section>
+
 
         <motion.section
         id="testimonials"
