@@ -1,12 +1,23 @@
 'use client';
+
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { initializeApp, getApps, getApp } from 'firebase/app';
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, User } from 'firebase/auth';
+import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, User, Auth, UserCredential, AuthError } from 'firebase/auth';
 import { Loader2, Lock, Mail, ArrowRight, ShieldCheck } from 'lucide-react';
 
+// --- Type Definitions ---
+interface FirebaseConfig {
+  apiKey: string;
+  authDomain: string;
+  projectId: string;
+  storageBucket: string;
+  messagingSenderId: string;
+  appId: string;
+}
+
 // --- Firebase Initialization ---
-const firebaseConfig = {
+const firebaseConfig: FirebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN!,
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID!,
@@ -15,23 +26,23 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID!,
 };
 
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
-const auth = getAuth(app);
+const app: FirebaseApp = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+const auth: Auth = getAuth(app);
 // ------------------------------
 
-export default function LoginPage() {
+export default function LoginPage(): JSX.Element {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [error, setError] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [checkingAuth, setCheckingAuth] = useState<boolean>(true);
 
   // Check if user is already logged in
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
       if (user) {
-        // Use router.push('/') for Next.js App Router compatible push
+        // Use router.push('/admin') for Next.js App Router compatible push
         router.push('/admin');
       } else {
         setCheckingAuth(false);
@@ -40,25 +51,40 @@ export default function LoginPage() {
     return () => unsubscribe();
   }, [router]);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential: UserCredential = await signInWithEmailAndPassword(auth, email, password);
       router.push('/admin');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+      
+      const authError = err as AuthError;
+      
+      if (
+        authError.code === 'auth/invalid-credential' || 
+        authError.code === 'auth/user-not-found' || 
+        authError.code === 'auth/wrong-password'
+      ) {
         setError('Invalid email or password.');
-      } else if (err.code === 'auth/too-many-requests') {
+      } else if (authError.code === 'auth/too-many-requests') {
         setError('Too many failed attempts. Please try again later.');
       } else {
         setError('Failed to log in. Please check your connection.');
       }
       setIsLoading(false);
     }
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setPassword(e.target.value);
   };
 
   if (checkingAuth) {
@@ -103,7 +129,7 @@ export default function LoginPage() {
                     type="email"
                     required
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={handleEmailChange}
                     className="w-full pl-10 pr-4 py-3 bg-black border border-zinc-800 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-blue-600/50 focus:border-blue-600 transition-all"
                     placeholder="admin@portfolio.com"
                   />
@@ -119,7 +145,7 @@ export default function LoginPage() {
                     type="password"
                     required
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={handlePasswordChange}
                     className="w-full pl-10 pr-4 py-3 bg-black border border-zinc-800 rounded-xl text-white placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-blue-600/50 focus:border-blue-600 transition-all"
                     placeholder="••••••••"
                   />

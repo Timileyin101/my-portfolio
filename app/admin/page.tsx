@@ -19,10 +19,15 @@ interface ToastMessage {
   message: string;
 }
 
-function useToast() {
+interface UseToastReturn {
+  showToast: (type: ToastType, message: string) => void;
+  ToastContainer: () => JSX.Element;
+}
+
+function useToast(): UseToastReturn {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
 
-  const showToast = useCallback((type: ToastType, message: string) => {
+  const showToast = useCallback((type: ToastType, message: string): void => {
     const id = Date.now();
     setToasts((prev) => [...prev, { id, type, message }]);
     
@@ -32,7 +37,7 @@ function useToast() {
   }, []);
 
   const ToastContainer = useMemo(() => {
-    return function ToastDisplay() {
+    return function ToastDisplay(): JSX.Element {
       return (
         <div className="fixed top-5 right-5 z-[9999] flex flex-col gap-3 max-w-md pointer-events-none">
           {toasts.map((toast) => (
@@ -91,9 +96,9 @@ interface ProjectPreviewProps {
   onDelete: (id: string, title: string) => void;
 }
 
-function ProjectPreview({ project, onClose, onDelete }: ProjectPreviewProps) {
+function ProjectPreview({ project, onClose, onDelete }: ProjectPreviewProps): JSX.Element {
   // State to track which media item is currently being viewed
-  const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
+  const [currentMediaIndex, setCurrentMediaIndex] = useState<number>(0);
   
   // CHANGE #3: Normalize media to always be an array, handling both new and legacy formats
   const mediaItems: MediaItem[] = useMemo(() => {
@@ -115,17 +120,17 @@ function ProjectPreview({ project, onClose, onDelete }: ProjectPreviewProps) {
   const hasMultipleMedia = mediaItems.length > 1;
 
   // CHANGE #4: Navigation functions for gallery
-  const goToNext = () => {
+  const goToNext = (): void => {
     setCurrentMediaIndex((prev) => (prev + 1) % mediaItems.length);
   };
 
-  const goToPrevious = () => {
+  const goToPrevious = (): void => {
     setCurrentMediaIndex((prev) => (prev - 1 + mediaItems.length) % mediaItems.length);
   };
 
   // CHANGE #5: Keyboard navigation support for better UX
   useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
+    const handleKeyPress = (e: KeyboardEvent): void => {
       if (e.key === 'ArrowRight' && hasMultipleMedia) {
         goToNext();
       } else if (e.key === 'ArrowLeft' && hasMultipleMedia) {
@@ -328,9 +333,9 @@ interface ProjectCardProps {
   onDelete: (id: string, title: string) => void;
 }
 
-function ProjectCard({ project, onPreview, onDelete }: ProjectCardProps) {
+function ProjectCard({ project, onPreview, onDelete }: ProjectCardProps): JSX.Element {
   // CHANGE #11: Get first media item for card preview, supporting both formats
-  const firstMedia = useMemo(() => {
+  const firstMedia = useMemo((): MediaItem | null => {
     if (project.media && Array.isArray(project.media) && project.media.length > 0) {
       return project.media[0];
     }
@@ -464,16 +469,16 @@ function ProjectCard({ project, onPreview, onDelete }: ProjectCardProps) {
 // MAIN ADMIN COMPONENT
 // ===========================
 // NOTE: Main component unchanged - all modifications were in child components
-export default function AdminPage() {
+export default function AdminPage(): JSX.Element {
   const router = useRouter();
   const [user, setUser] = useState<User | null | undefined>(undefined);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [checkingAuth, setCheckingAuth] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<'upload' | 'projects'>('projects');
   const [projects, setProjects] = useState<Project[]>([]);
-  const [loadingProjects, setLoadingProjects] = useState(true);
+  const [loadingProjects, setLoadingProjects] = useState<boolean>(true);
   const [previewProject, setPreviewProject] = useState<Project | null>(null);
-  const [hasShownWelcome, setHasShownWelcome] = useState(false);
+  const [hasShownWelcome, setHasShownWelcome] = useState<boolean>(false);
 
   const { showToast, ToastContainer } = useToast();
 
@@ -544,7 +549,6 @@ export default function AdminPage() {
       unsubscribe();
     };
   }, [router, showToast, hasShownWelcome]);
-
   // Load Projects Effect
   useEffect(() => {
     if (!isAdmin || !user) return;
@@ -575,7 +579,7 @@ export default function AdminPage() {
     return () => unsubscribe();
   }, [isAdmin, user, showToast]);
 
-  const handleSignOut = useCallback(async () => {
+  const handleSignOut = useCallback(async (): Promise<void> => {
     try {
       await signOut(auth);
       showToast('success', 'Signed out successfully');
@@ -586,7 +590,7 @@ export default function AdminPage() {
     }
   }, [router, showToast]);
 
-  const handleDeleteProject = useCallback(async (projectId: string, projectTitle: string) => {
+  const handleDeleteProject = useCallback(async (projectId: string, projectTitle: string): Promise<void> => {
     if (!confirm(`Are you sure you want to delete "${projectTitle}"? This action cannot be undone.`)) {
       return;
     }
