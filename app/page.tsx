@@ -374,14 +374,16 @@ export default function PortfolioPage() {
           {/* Left: Logo + Name */}
           <div className="flex items-center gap-3">
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.4 }}
-              whileHover={{ scale: 1.05 }}
-              className="w-12 h-12 rounded-md bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center font-bold text-lg cursor-pointer"
-            >
-              OT
-            </motion.div>
+          animate={{ y: [0, -7, 0] }}
+          transition={{
+            duration: 4,
+            ease: "easeInOut",
+            repeat: Infinity,
+          }}
+          whileHover={{ scale: 0.7 }}
+          className="w-4 h-12 rounded-md bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center font-bold text-lg cursor-pointer"
+        >
+        </motion.div>
 
             <div>
               <motion.h1
