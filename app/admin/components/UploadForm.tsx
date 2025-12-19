@@ -212,33 +212,40 @@ export default function UploadForm({ user, initialData, onFinish, showToast }: U
         ? data.tags.split(',').map((tag: string) => tag.trim()).filter(Boolean)
         : [];
 
-      const projectData: Partial<Project> & { 
-        updatedAt: any;
-        createdAt?: any;
-        userId?: string;
-        userEmail?: string;
-        status?: string;
-        featured?: boolean;
-      } = {
-        title: data.title.trim(),
-        description: data.description?.trim() || '',
-        type: data.type,
-        media: media,
-        liveLink: data.type === 'frontend' ? data.liveLink?.trim() : undefined,
-        tags: tagsArray,
-        updatedAt: serverTimestamp(),
-        ...(initialData
-          ? {}
-          : {
-              createdAt: serverTimestamp(),
-              userId: user.uid,
-              userEmail: user.email || 'unknown',
-              status: 'published',
-              featured: false,
-              views: 0,
-              likes: 0,
-            }),
-      };
+      const projectData: Partial<Project> & {
+      updatedAt: any;
+      createdAt?: any;
+      userId?: string;
+      userEmail?: string;
+      status?: string;
+      featured?: boolean;
+      views?: number;
+      likes?: number;
+    } = {
+      title: data.title.trim(),
+      description: data.description?.trim() || '',
+      type: data.type,
+      media: media,
+      tags: tagsArray,
+      updatedAt: serverTimestamp(),
+      ...(initialData
+        ? {}
+        : {
+            createdAt: serverTimestamp(),
+            userId: user.uid,
+            userEmail: user.email || 'unknown',
+            status: 'published',
+            featured: false,
+            views: 0,
+            likes: 0,
+          }),
+    };
+
+    // Conditionally add liveLink only if it exists
+    if (data.type === 'frontend' && data.liveLink?.trim()) {
+      projectData.liveLink = data.liveLink.trim();
+    }
+
 
       if (initialData) {
         await updateDoc(doc(db, 'projects', initialData.id), projectData);
