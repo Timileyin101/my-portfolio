@@ -636,7 +636,7 @@ export default function PortfolioPage(){
               }}
               className="hidden md:flex gap-6 text-sm opacity-85"
             >
-              {["About", "Services", "Projects", "Contact"].map((item, i) => (
+              {["About", "Services", "Projects", "Contact","Experience"].map((item, i) => (
                 <motion.a
                   key={i}
                   href={`#${item.toLowerCase()}`}
@@ -867,6 +867,190 @@ export default function PortfolioPage(){
           </motion.div>
         </motion.section>
 
+        {/* EXPERIENCE SECTION */}
+        <motion.section
+          id="experience"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="mt-20 scroll-mt-20"
+        >
+          <motion.h3
+            variants={fadeLeft}
+            transition={{ duration: 0.7 }}
+            className="text-2xl font-bold border-l-4 border-blue-500 pl-4"
+          >
+            Experience
+          </motion.h3>
+
+          {/* Frontend & Fullstack Development */}
+          <motion.div
+            variants={fadeUp}
+            className="mt-8"
+          >
+            <h4 className="text-xl font-semibold mb-6 text-blue-600">
+              Frontend & Fullstack Development
+            </h4>
+            
+            <motion.div
+              variants={{
+                visible: {
+                  transition: { staggerChildren: 0.15 }
+                }
+              }}
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            >
+              {/* Fullstack Developer */}
+              <motion.div
+                variants={fadeUp}
+                whileHover={{ y: -6, scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+                className={`p-5 rounded-2xl border ${
+                  dark
+                    ? "border-slate-800 bg-slate-900/50"
+                    : "border-slate-200 bg-slate-50"
+                }`}
+              >
+                <h5 className="text-base font-semibold">Fullstack Developer</h5>
+                <p className="text-blue-600 font-medium text-sm mt-1">
+                  Vhikkies Collection & Smart Expense App
+                </p>
+                <div className="text-xs opacity-70 mt-2">
+                  <p>May 2023 – Sep 2025</p>
+                  <p>Lagos, Nigeria</p>
+                </div>
+                <ul className="space-y-2 text-xs opacity-80 mt-4">
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2 mt-0.5">•</span>
+                    <span>Built e-commerce platform and finance tracker with secure authentication and analytics</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2 mt-0.5">•</span>
+                    <span>Implemented RESTful APIs with Node.js, MongoDB, and Firebase integration</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2 mt-0.5">•</span>
+                    <span>Focused on modular code for scalability and maintainability</span>
+                  </li>
+                </ul>
+              </motion.div>
+
+              {/* Frontend Developer */}
+              <motion.div
+                variants={fadeUp}
+                whileHover={{ y: -6, scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+                className={`p-5 rounded-2xl border ${
+                  dark
+                    ? "border-slate-800 bg-slate-900/50"
+                    : "border-slate-200 bg-slate-50"
+                }`}
+              >
+                <h5 className="text-base font-semibold">Frontend Developer</h5>
+                <p className="text-blue-600 font-medium text-sm mt-1">Sodzo WebClient</p>
+                <div className="text-xs opacity-70 mt-2">
+                  <p>May 2023 – Dec 2024</p>
+                  <p>Remote</p>
+                </div>
+                <ul className="space-y-2 text-xs opacity-80 mt-4">
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2 mt-0.5">•</span>
+                    <span>Developed responsive UI components and integrated backend APIs</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2 mt-0.5">•</span>
+                    <span>Collaborated with designers and engineers for optimized UX</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2 mt-0.5">•</span>
+                    <span>Tech stack: React, Next.js, JavaScript (ES6+), REST APIs, Git</span>
+                  </li>
+                </ul>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+
+          {/* Graphic Design Experience */}
+          <motion.div
+            variants={fadeUp}
+            className="mt-10"
+          >
+            <h4 className="text-xl font-semibold mb-6 text-blue-600">
+              Graphic Design
+            </h4>
+            
+            <motion.div
+              variants={{
+                visible: {
+                  transition: { staggerChildren: 0.15 }
+                }
+              }}
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            >
+              {/* Senior Graphic Designer - D's StyleHaven */}
+              <motion.div
+                variants={fadeUp}
+                whileHover={{ y: -6, scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+                className={`p-5 rounded-2xl border ${
+                  dark
+                    ? "border-slate-800 bg-slate-900/50"
+                    : "border-slate-200 bg-slate-50"
+                }`}
+              >
+                <h5 className="text-base font-semibold">Senior Graphic Designer</h5>
+                <p className="text-blue-600 font-medium text-sm mt-1">D's StyleHaven</p>
+                <div className="text-xs opacity-70 mt-2">
+                  <p>Apr 2023 – Jun 2024</p>
+                  <p>Lagos, Nigeria</p>
+                </div>
+                <ul className="space-y-2 text-xs opacity-80 mt-4">
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2 mt-0.5">•</span>
+                    <span>Created cohesive branding materials reflecting modern identity</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2 mt-0.5">•</span>
+                    <span>Designed marketing and social media visuals, increasing engagement</span>
+                  </li>
+                </ul>
+              </motion.div>
+
+              {/* Senior Graphic Designer - God's Favor Art Studio */}
+              <motion.div
+                variants={fadeUp}
+                whileHover={{ y: -6, scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+                className={`p-5 rounded-2xl border ${
+                  dark
+                    ? "border-slate-800 bg-slate-900/50"
+                    : "border-slate-200 bg-slate-50"
+                }`}
+              >
+                <h5 className="text-base font-semibold">Senior Graphic Designer</h5>
+                <p className="text-blue-600 font-medium text-sm mt-1">God's Favor Art Studio</p>
+                <div className="text-xs opacity-70 mt-2">
+                  <p>May 2022 – Jul 2023</p>
+                  <p>Lagos, Nigeria</p>
+                </div>
+                <ul className="space-y-2 text-xs opacity-80 mt-4">
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2 mt-0.5">•</span>
+                    <span>Enhanced brand identity through strategic branding materials</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2 mt-0.5">•</span>
+                    <span>Designed digital content improving client satisfaction and growth</span>
+                  </li>
+                  <li className="flex items-start">
+                    <span className="text-blue-600 mr-2 mt-0.5">•</span>
+                    <span>Delivered design solutions aligned with client objectives</span>
+                  </li>
+                </ul>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        </motion.section>
         {/* PROJECTS SECTION */}
         <motion.section
           id="projects"
